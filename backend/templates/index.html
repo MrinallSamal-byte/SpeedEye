@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Speed Monitoring</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px 12px; border: 1px solid #ddd; }
+        th { background-color: #f4f4f4; }
+    </style>
+</head>
+<body>
+    <h1>Vehicle Speed Monitoring</h1>
+    <h2>Speed Data</h2>
+    <table id="speed-data-table">
+        <thead>
+            <tr>
+                <th>Vehicle ID</th>
+                <th>Speed (km/h)</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <h2>Challans</h2>
+    <table id="challans-table">
+        <thead>
+            <tr>
+                <th>Vehicle ID</th>
+                <th>Speed (km/h)</th>
+                <th>Location</th>
+                <th>Issued At</th>
+                <th>Amount (₹)</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script>
+        async function fetchData(url, tableId) {
+            const response = await fetch(url);
+            const data = await response.json();
+            const tableBody = document.querySelector(`#${tableId} tbody`);
+            tableBody.innerHTML = '';
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                Object.values(item).forEach(value => {
+                    const cell = document.createElement('td');
+                    cell.textContent = value;
+                    row.appendChild(cell);
+                });
+                tableBody.appendChild(row);
+            });
+        }
+
+        fetchData('/api/speed_data', 'speed-data-table');
+        fetchData('/api/challans', 'challans-table');
+    </script>
+</body>
+</html>
